@@ -11,6 +11,9 @@ tokio = { version = "1.35.1", features = ["macros", "rt-multi-thread"] }
 tera = "1.0"
 rust-embed = { version = "5.0", default-features = false }
 lazy_static = "1.4.0"
+tracing = "0.1.40"
+tracing-subscriber = {version = "0.3.18", features = ["env-filter"]}
+tower-http = {version = "0.5.0",features = ["trace"]}
 
 [profile.release]
 lto = true
