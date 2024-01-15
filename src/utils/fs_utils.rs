@@ -18,7 +18,13 @@ pub fn get_directory_listing(dir_path: &Path) -> Vec<EntryInfo> {
     for entry_result in fs::read_dir(dir_path).expect("无法读取目录") {
         let entry = entry_result.expect("无法解析目录条目");
         let metadata = entry.metadata().expect("无法获取元数据");
-        let is_dir = !metadata.is_file();
+        let is_dir = if metadata.is_symlink() {
+            let symlink_p = fs::canonicalize(entry.path()).expect("无法解析的软连接");
+            let meta_p = fs::metadata(&symlink_p).unwrap();
+            meta_p.is_dir()
+        } else {
+            metadata.is_dir()
+        };
         let size = metadata.len();
         let modified = metadata.modified().unwrap();
         let entry_info = EntryInfo {
