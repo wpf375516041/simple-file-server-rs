@@ -21,3 +21,24 @@ pub fn date_format(value: &Value, args: &HashMap<String, Value>) -> Result<Value
 
     Ok(to_value(formatted_time)?)
 }
+
+// 自定义单位常量
+const UNITS: [&str; 5] = ["B", "KB", "MB", "GB", "TB"];
+
+pub fn file_size_format(value: &Value, _: &HashMap<String, Value>) -> Result<Value> {
+    let size: u64 = try_get_value!("file_size_format", "value", u64, value);
+
+    // 计算指数并确保在有效范围内
+    let index = (size as f64).log10() / 3.0;
+    let index = index as usize;
+    let index = if index > 4 { 4 } else { index };
+
+    // 计算单位换算后的值
+    let formatted_size = format!("{:.2}", size as f64 / 1024.0_f64.powi(index as i32));
+
+    Ok(to_value(format!(
+        "{} {}",
+        formatted_size.trim_end_matches('0').trim_end_matches('.'),
+        UNITS[index]
+    ))?)
+}

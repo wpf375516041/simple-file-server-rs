@@ -51,7 +51,7 @@
                 {% endif %}
             </td>
             <td>
-                {{dir.size}}
+                {{dir.size | file_size_format}}
             </td>
             <td>
                 {{dir.modified | date_format(format='%Y-%m-%d')}}

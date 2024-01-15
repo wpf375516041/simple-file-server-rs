@@ -1,4 +1,4 @@
-use crate::utils::tera_fn::date_format;
+use crate::utils::tera_fn::{date_format, file_size_format};
 use lazy_static::lazy_static;
 use tera::Tera;
 
@@ -10,6 +10,7 @@ lazy_static! {
     pub static ref TEMPLATES: Tera = {
         let mut tera = Tera::new(concat!(env!("CARGO_MANIFEST_DIR"), "/templates/**/*")).unwrap();
         tera.register_filter("date_format", date_format);
+        tera.register_filter("file_size_format", file_size_format);
         tera
     };
 }
