@@ -7,7 +7,7 @@ use std::time::SystemTime;
 pub struct EntryInfo {
     pub path: PathBuf,
     pub is_dir: bool,
-    pub size: Option<u64>,
+    pub size: u64,
     pub modified: SystemTime,
 }
 
@@ -18,10 +18,9 @@ pub fn get_directory_listing(dir_path: &Path) -> Vec<EntryInfo> {
     for entry_result in fs::read_dir(dir_path).expect("无法读取目录") {
         let entry = entry_result.expect("无法解析目录条目");
         let metadata = entry.metadata().expect("无法获取元数据");
-        let is_dir = metadata.is_dir();
-        let size = if is_dir { None } else { Some(metadata.len()) };
+        let is_dir = !metadata.is_file();
+        let size = metadata.len();
         let modified = metadata.modified().unwrap();
-
         let entry_info = EntryInfo {
             path: entry.path(),
             is_dir,

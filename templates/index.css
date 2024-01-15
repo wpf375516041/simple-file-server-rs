@@ -72,3 +72,63 @@ tr:nth-child(even) {
     background-color: #f2f2f2;
     border-radius: 4px;
 }
+
+
+/* index.css */
+#overlay {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    cursor: pointer;
+}
+
+#overlay h2 {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    font-size: 40px;
+    color: #4CAF50;
+    transform: translate(-50%, -50%);
+}
+
+#progress-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    background-color: #f2f2f2;
+    border-radius: 25px;
+    padding: 3px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    border-radius: 20px;
+    background-color: #ddd;
+}
+
+.progress-bar-fill {
+    background-color: #4CAF50;
+    width: 0%;
+    height: 100%;
+    display: block;
+    border-radius: 20px;
+}
+
+#progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #4CAF50;
+    font-size: 25px;
+}

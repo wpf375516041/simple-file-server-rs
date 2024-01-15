@@ -1,14 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html lang="ch">
+
 <head>
     <meta charset="UTF-8" />
     <title>{{title}}</title>
     <link rel="stylesheet" href="/templates/index.css" />
+    <script src="/templates/index.js"></script>
 </head>
 
 <body>
-<input type="hidden" id="directory" value="{{parent_dir}}" />
-<h1>Directory listing for {{parent_dir}}</h1>
+<input type="hidden" id="directory" value={{parent_dir}}/>
+<h1 >Directory listing for {{parent_dir}}</h1>
 
 <hr> <!-- 分隔线 -->
 
@@ -39,20 +41,38 @@
         </tr>
         </thead>
         <tbody>
+        {% for dir in dirs %}
         <tr>
-            {% for dir in dirs %}
             <td>
-                {{ dir.path }}
                 {% if dir.is_dir %}
-                (directory)
+                <a href="/?dir={{dir.path}}">{{dir.path}}</a>
+                {% else %}
+                <a>{{dir.path}}</a>
                 {% endif %}
-                <!-- 根据需要添加其他属性 -->
             </td>
-            {% endfor %}
+            <td>
+                {{dir.size}}
+            </td>
+            <td>
+                {{dir.modified}}
+            </td>
         </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>
 
+
+<!-- Overlay -->
+<div id="overlay">
+    <h2>正在上传...</h2>
+    <div id="progress-container">
+        <div class="progress-bar">
+            <div class="progress-bar-fill"></div>
+        </div>
+        <span id="progress-text">0%</span>
+    </div>
+</div>
 </body>
+
 </html>
