@@ -54,7 +54,7 @@
                 {{dir.size}}
             </td>
             <td>
-                {{dir.modified | date_format}}
+                {{dir.modified | date_format(format='%Y-%m-%d')}}
             </td>
         </tr>
         {% endfor %}
