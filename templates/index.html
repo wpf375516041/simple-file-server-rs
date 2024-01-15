@@ -1,11 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/templates/index.css" />
 </head>
+
 <body>
-    <h1>{{ title }}</h1>
-   <p>{{ content }}</p>
+<input type="hidden" id="directory" value="{{parent_dir}}" />
+<h1>Directory listing for {{parent_dir}}</h1>
+
+<hr> <!-- 分隔线 -->
+
+<form method="POST" action="/upload" enctype="multipart/form-data">
+    <label for="file-upload" class="custom-file-upload">
+        选择文件
+    </label>
+    <input id="file-upload" type="file" name="files" multiple style="display: none;">
+    <span id="file-name">请选择要上传的文件……</span> <!-- Element to display the file name -->
+    <div style="display: inline-block;">
+        <button type="submit">上传</button>
+        <!-- Add a button that links to the home page -->
+        <a href="/" style="margin-left: 10px;">
+            <button  type="button">返回主页</button>
+        </a>
+    </div>
+</form>
+
+<hr> <!-- 分隔线 -->
+
+<div class="table-container">
+    <table>
+        <thead>
+        <tr>
+            <th>文件名</th>
+            <th>文件大小</th>
+            <th>最后修改时间</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            {% for dir in dirs %}
+            <td>
+                {{ dir.path }}
+                {% if dir.is_dir %}
+                (directory)
+                {% endif %}
+                <!-- 根据需要添加其他属性 -->
+            </td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>
