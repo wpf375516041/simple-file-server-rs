@@ -1,18 +1,12 @@
 use axum::extract::DefaultBodyLimit;
 use axum::routing::{get, post};
 use axum::Router;
-use rust_embed::RustEmbed;
 use simple_file_server_rs::api::fs_api::{file_download, file_upload, home_dir};
 use std::net::IpAddr;
 use structopt::StructOpt;
-use tower_http::services::ServeDir;
 use tower_http::trace;
 use tower_http::trace::TraceLayer;
 use tracing::{info, Level};
-
-#[derive(RustEmbed)]
-#[folder = "templates/"] // 指定模板文件夹路径
-struct TemplateFiles;
 
 #[derive(Debug, StructOpt)]
 struct CliOptions {
@@ -21,11 +15,15 @@ struct CliOptions {
     port: u16,
 }
 
+#[axum_static_include::static_serve("templates")]
+fn assert_fold() -> axum::Router {}
+
 #[tokio::main]
 async fn main() {
     // 解析命令行参数
     let cli_options = CliOptions::from_args();
     let local_ip: IpAddr = get_local_ip().unwrap();
+    let asserts = assert_fold();
 
     // http日志打印美化
     tracing_subscriber::fmt()
@@ -39,7 +37,7 @@ async fn main() {
         .route("/download/:file", get(file_download))
         .route("/upload", post(file_upload))
         // 让css js能够渲染
-        .nest_service("/templates", ServeDir::new("templates"))
+        .nest_service("/templates", asserts)
         .layer(
             // 添加http日志打印中间件
             TraceLayer::new_for_http()

@@ -141,6 +141,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "axum_static_include"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5f738fe930d0c52caad7cea7ca8e3af831616e02bec374b1ce75522c3cced177"
+dependencies = [
+ "direx",
+ "proc-macro2",
+ "quote",
+ "sha256",
+ "syn 2.0.48",
+]
+
+[[package]]
 name = "axum_typed_multipart"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -399,6 +412,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "direx"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b9255ae6a531a8897a781822d708a1eb3c1431cb003169371efa0fb5949f3e5f"
+
+[[package]]
 name = "encoding_rs"
 version = "0.8.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -616,6 +635,12 @@ name = "hermit-abi"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d77f7ec81a6d05a3abb01ab6eb7590f6083d08449fe5a1c8b1e620283546ccb7"
+
+[[package]]
+name = "hex"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
 name = "http"
@@ -1383,6 +1408,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "sha256"
+version = "1.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "18278f6a914fa3070aa316493f7d2ddfb9ac86ebc06fa3b83bffda487e9065b0"
+dependencies = [
+ "async-trait",
+ "bytes",
+ "hex",
+ "sha2",
+ "tokio",
+]
+
+[[package]]
 name = "sharded-slab"
 version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1396,6 +1434,7 @@ name = "simple-file-server-rs"
 version = "0.1.0"
 dependencies = [
  "axum",
+ "axum_static_include",
  "axum_typed_multipart",
  "chrono",
  "http",
