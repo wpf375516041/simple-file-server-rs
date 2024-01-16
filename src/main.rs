@@ -35,7 +35,7 @@ async fn main() {
         )
         .layer(DefaultBodyLimit::max(1024 * 1024 * 1024));
     // run our app with hyper, listening globally on port 8080
-    info!("Run app Listening on port 8080");
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();
+    info!("Run app Listening on port 80");
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:80").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
