@@ -1,7 +1,7 @@
 use axum::routing::get;
 use axum::Router;
 use rust_embed::RustEmbed;
-use simple_file_server_rs::api::fs_api::home_dir;
+use simple_file_server_rs::api::fs_api::{file_download, home_dir};
 use tower_http::services::ServeDir;
 use tower_http::trace;
 use tower_http::trace::TraceLayer;
@@ -22,6 +22,7 @@ async fn main() {
     // build our application with a single route
     let app = Router::new()
         .route("/", get(home_dir))
+        .route("/download/:file", get(file_download))
         // 让css js能够渲染
         .nest_service("/templates", ServeDir::new("templates"))
         .layer(

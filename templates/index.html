@@ -2,15 +2,15 @@
 <html lang="ch">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>{{title}}</title>
-    <link rel="stylesheet" href="/templates/index.css" />
+    <link rel="stylesheet" href="/templates/index.css"/>
     <script src="/templates/index.js"></script>
 </head>
 
 <body>
 <input type="hidden" id="directory" value={{parent_dir}}/>
-<h1 >Directory listing for {{parent_dir}}</h1>
+<h1>Directory listing for {{parent_dir}}</h1>
 
 <hr> <!-- 分隔线 -->
 
@@ -24,7 +24,7 @@
         <button type="submit">上传</button>
         <!-- Add a button that links to the home page -->
         <a href="/" style="margin-left: 10px;">
-            <button  type="button">返回主页</button>
+            <button type="button">返回主页</button>
         </a>
     </div>
 </form>
@@ -47,7 +47,10 @@
                 {% if dir.is_dir %}
                 <a href="/?dir={{dir.path}}">{{dir.path}}</a>
                 {% else %}
-                <a>{{dir.path}}</a>
+                <a href="/download/{{dir.path | urlencode_strict}}"
+                   download="{{dir.path | split(pat='/') | last}}">
+                    {{dir.path}
+                </a>
                 {% endif %}
             </td>
             <td>
