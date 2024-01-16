@@ -1,7 +1,8 @@
-use axum::routing::get;
+use axum::extract::DefaultBodyLimit;
+use axum::routing::{get, post};
 use axum::Router;
 use rust_embed::RustEmbed;
-use simple_file_server_rs::api::fs_api::{file_download, home_dir};
+use simple_file_server_rs::api::fs_api::{file_download, file_upload, home_dir};
 use tower_http::services::ServeDir;
 use tower_http::trace;
 use tower_http::trace::TraceLayer;
@@ -23,6 +24,7 @@ async fn main() {
     let app = Router::new()
         .route("/", get(home_dir))
         .route("/download/:file", get(file_download))
+        .route("/upload", post(file_upload))
         // 让css js能够渲染
         .nest_service("/templates", ServeDir::new("templates"))
         .layer(
@@ -30,7 +32,8 @@ async fn main() {
             TraceLayer::new_for_http()
                 .make_span_with(trace::DefaultMakeSpan::new().level(Level::INFO))
                 .on_response(trace::DefaultOnResponse::new().level(Level::INFO)),
-        );
+        )
+        .layer(DefaultBodyLimit::max(1024 * 1024 * 1024));
     // run our app with hyper, listening globally on port 8080
     info!("Run app Listening on port 8080");
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();

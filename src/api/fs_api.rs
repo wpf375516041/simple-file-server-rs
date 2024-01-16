@@ -3,9 +3,11 @@ use crate::TEMPLATES;
 use axum::body::Body;
 use axum::extract::{Path, Query, Request};
 use axum::response::{Html, IntoResponse};
+use axum_typed_multipart::{FieldData, TryFromMultipart, TypedMultipart};
 use http::{header, HeaderMap, StatusCode};
 use std::collections::HashMap;
 use std::path::{Path as FS_Path, PathBuf};
+use tempfile::NamedTempFile;
 use tera::Context;
 use tower_http::services::ServeFile;
 
@@ -48,4 +50,23 @@ pub async fn file_download(Path(file): Path<String>) -> impl IntoResponse {
     let mut req = Request::new(Body::empty());
     *req.headers_mut() = headers;
     Ok(ServeFile::new(path).try_call(req).await.unwrap())
+}
+
+#[derive(TryFromMultipart)]
+pub struct FileUploadForm {
+    #[form_data(limit = "unlimited")]
+    files: FieldData<NamedTempFile>,
+    path: String,
+}
+
+//实现文件上传
+pub async fn file_upload(
+    TypedMultipart(file_form): TypedMultipart<FileUploadForm>,
+) -> impl IntoResponse {
+    let filename = file_form.files.metadata.file_name.unwrap();
+    let path = FS_Path::new(&file_form.path).join(filename);
+    match file_form.files.contents.persist(path) {
+        Ok(_) => StatusCode::OK,
+        Err(_) => StatusCode::INTERNAL_SERVER_ERROR,
+    }
 }

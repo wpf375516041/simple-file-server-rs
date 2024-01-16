@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-axum = "0.7.3"
+axum = { version = "0.7.3",features = ["multipart"] }
 tokio = { version = "1.35.1", features = ["macros", "rt-multi-thread"] }
 tera = { version = "1.0",features = ["builtins"] }
 rust-embed = { version = "5.0", default-features = false }
@@ -17,6 +17,9 @@ tower-http = {version = "0.5.0",features = ["trace","fs"]}
 serde = { version = "1.0.195", features = ["derive"] }
 chrono = "0.4.31"
 http = "1.0.0"
+log = "0.4.20"
+axum_typed_multipart = "0.11.0"
+tempfile = "3.8.1"
 
 [profile.release]
 lto = true
