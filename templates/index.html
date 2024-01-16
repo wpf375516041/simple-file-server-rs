@@ -47,9 +47,8 @@
                 {% if dir.is_dir %}
                 <a href="/?dir={{dir.path}}">{{dir.path}}</a>
                 {% else %}
-                <a href="/download/{{dir.path | urlencode_strict}}"
-                   download="{{dir.path | split(pat='/') | last}}">
-                    {{dir.path}
+                <a href="/download/{{dir.path | urlencode_strict}}" download="{{dir.path | split(pat='/') | last}}">
+                    {{dir.path}}
                 </a>
                 {% endif %}
             </td>
@@ -57,7 +56,7 @@
                 {{dir.size | file_size_format}}
             </td>
             <td>
-                {{dir.modified | date_format(format='%Y-%m-%d')}}
+                {{dir.modified | date_format(format='%Y-%m-%d %H:%M:%S')}}
             </td>
         </tr>
         {% endfor %}
