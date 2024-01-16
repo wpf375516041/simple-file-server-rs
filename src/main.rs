@@ -3,6 +3,8 @@ use axum::routing::{get, post};
 use axum::Router;
 use rust_embed::RustEmbed;
 use simple_file_server_rs::api::fs_api::{file_download, file_upload, home_dir};
+use std::net::IpAddr;
+use structopt::StructOpt;
 use tower_http::services::ServeDir;
 use tower_http::trace;
 use tower_http::trace::TraceLayer;
@@ -12,8 +14,19 @@ use tracing::{info, Level};
 #[folder = "templates/"] // 指定模板文件夹路径
 struct TemplateFiles;
 
+#[derive(Debug, StructOpt)]
+struct CliOptions {
+    /// Server port
+    #[structopt(short, long, default_value = "80")]
+    port: u16,
+}
+
 #[tokio::main]
 async fn main() {
+    // 解析命令行参数
+    let cli_options = CliOptions::from_args();
+    let local_ip: IpAddr = get_local_ip().unwrap();
+
     // http日志打印美化
     tracing_subscriber::fmt()
         .with_target(false)
@@ -35,7 +48,18 @@ async fn main() {
         )
         .layer(DefaultBodyLimit::max(1024 * 1024 * 1024));
     // run our app with hyper, listening globally on port 8080
-    info!("Run app Listening on port 80");
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:80").await.unwrap();
+    info!("Run app Listening on {}:{}", local_ip, cli_options.port);
+    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", cli_options.port))
+        .await
+        .unwrap();
     axum::serve(listener, app).await.unwrap();
+}
+
+fn get_local_ip() -> Result<IpAddr, Box<dyn std::error::Error>> {
+    // 使用网络库来获取本机的IP地址
+    let socket = std::net::UdpSocket::bind("0.0.0.0:0")?;
+    socket.connect("8.8.8.8:80")?;
+    let local_ip = socket.local_addr()?.ip();
+
+    Ok(local_ip)
 }

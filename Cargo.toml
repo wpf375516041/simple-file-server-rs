@@ -20,6 +20,7 @@ http = "1.0.0"
 log = "0.4.20"
 axum_typed_multipart = "0.11.0"
 tempfile = "3.8.1"
+structopt = "0.3"
 
 [profile.release]
 lto = true
